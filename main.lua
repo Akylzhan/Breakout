@@ -1,12 +1,6 @@
 require 'src/Dependencies'
 
 function love.load()
-	math.randomseed(os.time())
-    
-    love.graphics.setDefaultFilter('nearest', 'nearest')
-    
-    love.window.setTitle('Breakout')
-
     
     push:setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT, {
         vsync = true,
@@ -14,18 +8,13 @@ function love.load()
         resizable = true
     })
 
-
-    gFonts = {
-    	['small'] = love.graphics.newFont('font.ttf', 8),
-    	['medium'] = love.graphics.newFont('font.ttf', 16),
-    	['large'] = love.graphics.newFont('font.ttf', 24)
-    }
     love.graphics.setFont(gFonts['medium'])
 
 
     gStateMachine = StateMachine {
     	['menu'] = function() return MenuState() end,
-    	['play'] = function() return PlayState() end
+    	['play'] = function() return PlayState() end,
+    	['gameOver'] = function() return GameOverState() end
     }
 
     gStateMachine:change('menu')
@@ -43,9 +32,11 @@ end
 
 function love.draw()
 	push:start()
+	
 	love.graphics.draw(love.graphics.newImage("img/background.jpg"), 0, 0)
 
 	gStateMachine:render()
+
 	displayFPS()
 
 	push:finish()
@@ -76,4 +67,5 @@ function displayFPS()
 	love.graphics.setFont(gFonts['small'])
 	love.graphics.setColor(1, 1, 1)
 	love.graphics.print('FPS: ' .. tostring(love.timer.getFPS()), 10, 10) 	
+	love.graphics.setFont(gFonts['medium'])
 end

@@ -41,7 +41,7 @@ function MenuState:render()
 	if highlighted == 2 then
 		love.graphics.setColor(255/255, 0, 180/255)
 	end	
-	love.graphics.printf('Start', 0, VIRTUAL_HEIGHT/2 + 50, VIRTUAL_WIDTH, 'center')
+	love.graphics.printf('High Scores', 0, VIRTUAL_HEIGHT/2 + 50, VIRTUAL_WIDTH, 'center')
 
 	--reset
 	love.graphics.setColor(1,1,1)
@@ -54,5 +54,4 @@ function MenuState:render()
 
 	--reset
 	love.graphics.setColor(1,1,1)
-	love.graphics.setFont(gFonts['medium'])
 end
