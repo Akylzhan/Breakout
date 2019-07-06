@@ -1,1 +1,1 @@
-# Breakout
+# Remake of classic game Breakout
