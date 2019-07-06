@@ -1,48 +1,35 @@
 Player = Class{}
 
-GRAVITY = 8
 function Player:init()
 	
-	self.radius = 12
-	
-	self.x = 30
-	self.y = 30
+	self.width = 64
+	self.height = 8
 
-	self.dy = 0
-	self.dx = 0
+	self.y = VIRTUAL_HEIGHT - 20
+	self.x = VIRTUAL_WIDTH/2 - self.width / 2
 end
 
 
 function Player:update(dt)
-	
--- y-axis movement
-	self.dy = self.dy + GRAVITY * dt	
-	if love.keyboard.wasPressed('space') or love.keyboard.wasPressed('up') then
-		self.dy = -3
-	end
-
-	self.y = self.y + self.dy
-	--to prevent from falling down and jumping out of upper border
-	if self.dy < 0 then
-        self.y = math.max(0, self.y + self.dy * dt)
-   
-    else
-        self.y = math.min(VIRTUAL_HEIGHT - self.radius, self.y + self.dy * dt)
-    end
 
 -- x-axis movement
 	if love.keyboard.isDown('left') then
-		self.dx = -150 * dt
+		self.dx = -170 * dt
 	elseif love.keyboard.isDown('right') then
-		self.dx = 150 * dt
+		self.dx = 170 * dt
 	else self.dx = 0
 	end
 
 	self.x = self.x + self.dx
+	if self.dx < 0 then
+		self.x = math.max(0, self.x + self.dx * dt)
+	else
+		self.x = math.min(VIRTUAL_WIDTH - self.width, self.x + self.dx * dt)
+	end
 end
 
 function Player:render()
-	love.graphics.setColor(255/255, 80/255, 80/255)
-	love.graphics.circle('fill',self.x, self.y, self.radius, 20)
-	love.graphics.setColor(0, 0, 0)
+	love.graphics.setColor(255/255, 80/255, 255/255)
+	love.graphics.rectangle('fill',self.x, self.y, self.width, self.height)
+	love.graphics.setColor(1, 1, 1)
 end

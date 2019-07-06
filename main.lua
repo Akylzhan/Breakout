@@ -1,35 +1,36 @@
-push = require 'push'
-
-Class = require 'class'
-
-require 'StateMachine'
-require 'Player'
-
-WINDOW_WIDTH = 1280
-WINDOW_HEIGHT = 720
-
-VIRTUAL_WIDTH = 640
-VIRTUAL_HEIGHT = 360
-
+require 'src/Dependencies'
 
 function love.load()
+	math.randomseed(os.time())
+    
     love.graphics.setDefaultFilter('nearest', 'nearest')
     
-    player = Player()
+    love.window.setTitle('Breakout')
 
-    -- push is needed to make resolution 640x360 on any window resolution
-    -- you can resize window, but in-game resolution stays 640x360
+    
     push:setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT, {
         vsync = true,
         fullscreen = false,
         resizable = true
     })
 
-    --states are --> menu, playState, gameOver
+
+    gFonts = {
+    	['small'] = love.graphics.newFont('font.ttf', 8),
+    	['medium'] = love.graphics.newFont('font.ttf', 16),
+    	['large'] = love.graphics.newFont('font.ttf', 24)
+    }
+    love.graphics.setFont(gFonts['medium'])
+
+
     gStateMachine = StateMachine {
+    	['menu'] = function() return MenuState() end,
+    	['play'] = function() return PlayState() end
     }
 
-    --table of keys
+    gStateMachine:change('menu')
+
+
     love.keyboard.keysPressed = {}
 end
 
@@ -37,17 +38,20 @@ function love.update(dt)
 
 	gStateMachine:update(dt)
 
-	player:update(dt)
-
-    --empty table
     love.keyboard.keysPressed = {}
 end
 
 function love.draw()
 	push:start()
-	player:render()
+	love.graphics.draw(love.graphics.newImage("img/background.jpg"), 0, 0)
+
+	gStateMachine:render()
+	displayFPS()
+
 	push:finish()
 end
+
+
 
 
 function love.resize(w, h)
@@ -57,10 +61,6 @@ end
 --functions --> keyboard 
 function love.keypressed(key)
     love.keyboard.keysPressed[key] = true
-    
-    if key == 'escape' then
-        love.event.quit()
-    end
 end
 
 function love.keyboard.wasPressed(key)
@@ -69,4 +69,11 @@ function love.keyboard.wasPressed(key)
     else
         return false
     end
+end
+
+
+function displayFPS()
+	love.graphics.setFont(gFonts['small'])
+	love.graphics.setColor(1, 1, 1)
+	love.graphics.print('FPS: ' .. tostring(love.timer.getFPS()), 10, 10) 	
 end
