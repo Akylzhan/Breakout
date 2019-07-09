@@ -20,8 +20,8 @@ function Ball:update(dt)
 
 	if self.y <= 0 then
 		gSounds['touch']:play()
-		self.dy = self.dy * -1
-		self.y = 1
+		self.dy = -self.dy
+		self.y = self.y + 1
 		if self.dx < 0 then
 			self.dx = -math.random(100, 120)
         else
@@ -31,8 +31,8 @@ function Ball:update(dt)
 
 	if self.x >= VIRTUAL_WIDTH - self.width or self.x <= 0 then
 		gSounds['touch']:play()
-		self.dx = self.dx * -1
-
+		self.dx = -self.dx
+		self.x = self.x + (VIRTUAL_WIDTH - self.width - self.x < self.x and -1 or 1)
 		if self.dy < 0 then
 			self.dy = -math.random(100, 120)
         else

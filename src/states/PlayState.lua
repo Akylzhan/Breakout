@@ -39,11 +39,11 @@ function PlayState:update(dt)
 					table.remove(tableBricks, i)
 				end
 
-				if ball.y + ball.height >= brick.y and ball.y <= brick.y + brick.height then
-					ball.y = ball.y + (ball.dy < 0 and 2 or -2)
+				if ball.y + ball.height+1 >= brick.y and ball.y-1 <= brick.y + brick.height then
+					ball.y = ball.y + (ball.dy < 0 and 1 or -1)
 					ball.dy = -ball.dy
 				else
-					ball.x = ball.x + (ball.dx < 0 and 2 or -2)
+					ball.x = ball.x + (ball.dx < 0 and 1 or -1)
 					ball.dx = -ball.dx
 				end
 
